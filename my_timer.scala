@@ -1,14 +1,9 @@
+import scala.concurrent.Future
 import scala.io.StdIn.readLine
+import scala.util.{Success, Failure}
+
 
 class MyTimer{
-
-  // TODO -
-  // OnStart - Prompt for a time and a time unit
-  // Take input as hour/minute/second
-  // Continuously output remainder
-  // Pause on any key press
-  // Prompt to press any key to resume
-  // End application when timer runs out
 
   var running : Boolean = true
 
@@ -23,7 +18,7 @@ class MyTimer{
       var input = readLine()
 
       if(CheckUserInput(input : String)){
-        println(f"Valid input: $input")
+        //println(f"Valid input: $input")
         var timerParams = ParseUserInput(input)
         StartTimer(timerParams)
       }
@@ -60,42 +55,72 @@ class MyTimer{
     // seconds
     val secondsStartLocation = lowerCaseInput.indexOf("s")
     if (secondsStartLocation != -1){
-      // Delete me?
       numSeconds = lowerCaseInput.slice(0, secondsStartLocation).toInt
       return numSeconds
     }
 
     // minute
-    if (lowerCaseInput.indexOf("m") != -1){
-      // Delete me
-      println("minutes")
+    val minutesStartLocation = lowerCaseInput.indexOf("m")
+    if (minutesStartLocation != -1){
+      // TODO
+      numSeconds = (lowerCaseInput.slice(0, minutesStartLocation).toInt * 60)
       return numSeconds
 
     }
 
     // hours
-    if (lowerCaseInput.indexOf("h") != -1){
-      // Delete me
-      println("hours")
+    val hoursStartLocation = lowerCaseInput.indexOf("h")
+    if (hoursStartLocation != -1){
+      numSeconds = (lowerCaseInput.slice(0, hoursStartLocation).toInt * 60 * 60)
       return numSeconds
     }
 
     return numSeconds
   }
 
-  def StartTimer(numSeconds : Int) : Unit = {
-    var paused : Boolean = false
-    while(numSeconds > 0){
-      while(!paused){
-        
+  def StartTimer(number : Int) : Unit = {
+    var paused = false
+    var numSeconds = number
+    println(f"I will now start a timer for $numSeconds seconds")
+
+    // Asynch callback on any keypress
+    // Compiler seems to throw an error unless this is imported here
+    // Are imports supposed to be at the top of a class?
+    import scala.concurrent.ExecutionContext.Implicits.global
+    val f: Future[Int] = Future {
+      System.in.read()
+    }
+
+    f onComplete {
+      case Success(posts) => {
+        println(f"That was a successfull callback")
+        paused = true
+      }
+      case Failure(t) => println("An error has occurred: " + t.getMessage)
+    }
+
+    while(numSeconds > 0 && !paused){
+      // Output remaining time
+      println(f"There are $numSeconds seconds left")
+      println("Press any key to pause timer.")
+      println("-------------")
+
+      // Decrement seconds remaining
+      numSeconds = numSeconds - 1;
+      // Sleep for one second
+      //Thread.sleep(1000)
+
+      // Asynch callback listens for keypress and sets paused to true when it happens
+      while(paused){
+        // Prompt user to unpause
+        println("Press any key to resume timer.")
+        // Wait for unpause (any key)
+        System.in.read()
+        paused = false
       }
     }
   }
 
-
-
-
   main(Array())
-
 
 }
