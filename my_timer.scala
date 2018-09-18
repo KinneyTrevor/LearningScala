@@ -10,50 +10,90 @@ class MyTimer{
   // Prompt to press any key to resume
   // End application when timer runs out
 
-  val running : Boolean = true
+  var running : Boolean = true
 
   def main(args: Array[String]): Unit = {
     println("Welcome to my timer")
     println("Please enter a time input in any of the following formats")
     println("Number Unit -- 1M, 1 Minute, 2 H, 2Hours, 78s, 78 seconds")
+    println("Input a 'q' to quit and exit the program.")
 
+    // Main REPL
     while(running){
-      val input = GetInput()
+      var input = readLine()
+
       if(CheckUserInput(input : String)){
-        println("Valid input")
-
+        println(f"Valid input: $input")
+        var timerParams = ParseUserInput(input)
+        StartTimer(timerParams)
       }
+
+      if(input == "q"){
+        println("Exiting timer")
+        running = false
+      }
+
+      else if(!CheckUserInput(input : String)){
+        println("I don't recognize that input, please try again")
+      }
+
+      println("-------------")
+
     }
-  }
-  
-  def GetInput(): String = {
-
-    val input = readLine()
-    return input
-
   }
 
   def CheckUserInput(userInput : String): Boolean = {
-
-    // Delete me
-    println(f"Value passed is: $userInput")
-
     // Use raw to process regex without having to worry about escaping special chars
     // This breaks on 45mhs
     val AcceptablePattern = raw"(\d)+\s?([MmHhSs]+)".r
 
     AcceptablePattern.findFirstMatchIn(userInput) match {
-      case Some(_) => println("It's a match pal")
-      case None => println("No can do")
+      case Some(_) => return true
+      case None => return false
+    }
+  }
+
+  def ParseUserInput(userInput : String): Int = {
+    var numSeconds : Int = 0
+    var lowerCaseInput = userInput.toLowerCase()
+
+    // seconds
+    val secondsStartLocation = lowerCaseInput.indexOf("s")
+    if (secondsStartLocation != -1){
+      // Delete me?
+      numSeconds = lowerCaseInput.slice(0, secondsStartLocation).toInt
+      return numSeconds
     }
 
-    return true
+    // minute
+    if (lowerCaseInput.indexOf("m") != -1){
+      // Delete me
+      println("minutes")
+      return numSeconds
 
+    }
+
+    // hours
+    if (lowerCaseInput.indexOf("h") != -1){
+      // Delete me
+      println("hours")
+      return numSeconds
+    }
+
+    return numSeconds
   }
 
-  def ParseUserInput(): Unit={
-
+  def StartTimer(numSeconds : Int) : Unit = {
+    var paused : Boolean = false
+    while(numSeconds > 0){
+      while(!paused){
+        
+      }
+    }
   }
+
+
+
 
   main(Array())
 
