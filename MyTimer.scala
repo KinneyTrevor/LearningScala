@@ -67,7 +67,6 @@ class MyTimer{
     // minute
     val minutesStartLocation = lowerCaseInput.indexOf("m")
     if (minutesStartLocation != -1){
-      // TODO
       numSeconds = (lowerCaseInput.slice(0, minutesStartLocation).toInt * 60)
       return numSeconds
 
@@ -111,7 +110,7 @@ class MyTimer{
       // Decrement seconds remaining
       numSeconds = numSeconds - 1;
       // Sleep for one second
-      //Thread.sleep(1000)
+      Thread.sleep(1000)
 
       // Asynch callback listens for keypress and sets paused to true when it happens
       while(paused){
@@ -122,6 +121,7 @@ class MyTimer{
         // Wait for unpause (any key)
         System.in.read()
         println("Resuming timer")
+        println("-------------")
         paused = false
         StartTimer(numSeconds)
       }
