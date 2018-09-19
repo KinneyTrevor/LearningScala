@@ -8,7 +8,7 @@ class MyTimer{
   var running : Boolean = true
 
   def main(args: Array[String]): Unit = {
-    println("Welcome to my timer")
+    println("\nWelcome to my timer")
     println("Please enter a time input in any of the following formats")
     println("Number Unit -- 1M, 1 Minute, 2 H, 2Hours, 78s, 78 seconds")
     println("Input a 'q' to quit and exit the program.")
@@ -20,9 +20,13 @@ class MyTimer{
       if(CheckUserInput(input : String)){
         //println(f"Valid input: $input")
         var timerParams = ParseUserInput(input)
+        println(f"I will now start a timer for $timerParams seconds")
         StartTimer(timerParams)
+        input = "q"
+        print("Timer successfully finished, exiting application.")
       }
 
+      // User wants to quit the application
       if(input == "q"){
         println("Exiting timer")
         running = false
@@ -33,13 +37,14 @@ class MyTimer{
       }
 
       println("-------------")
-
     }
   }
 
   def CheckUserInput(userInput : String): Boolean = {
+
+    var lowerCaseUserInput = userInput.toLowerCase()
+
     // Use raw to process regex without having to worry about escaping special chars
-    // This breaks on 45mhs
     val AcceptablePattern = raw"(\d)+\s?([MmHhSs]+)".r
 
     AcceptablePattern.findFirstMatchIn(userInput) match {
@@ -81,22 +86,20 @@ class MyTimer{
   def StartTimer(number : Int) : Unit = {
     var paused = false
     var numSeconds = number
-    println(f"I will now start a timer for $numSeconds seconds")
 
     // Asynch callback on any keypress
     // Compiler seems to throw an error unless this is imported here
-    // Are imports supposed to be at the top of a class?
+    // Are imports supposed to be at the top of a class or is this considered okay?
     import scala.concurrent.ExecutionContext.Implicits.global
     val f: Future[Int] = Future {
       System.in.read()
     }
-
     f onComplete {
       case Success(posts) => {
-        println(f"That was a successfull callback")
+        //println(f"That was a successfull callback")
         paused = true
       }
-      case Failure(t) => println("An error has occurred: " + t.getMessage)
+      case Failure(t) => println("Something has gone wrong")
     }
 
     while(numSeconds > 0 && !paused){
@@ -113,14 +116,21 @@ class MyTimer{
       // Asynch callback listens for keypress and sets paused to true when it happens
       while(paused){
         // Prompt user to unpause
+        println(f"Pausing timer at $numSeconds seconds remaining")
         println("Press any key to resume timer.")
+        println("-------------")
         // Wait for unpause (any key)
         System.in.read()
+        println("Resuming timer")
         paused = false
+        StartTimer(numSeconds)
       }
     }
+
+    // This ends the execution and causes the program to eventually exit
+    running = false
+
   }
 
   main(Array())
-
 }
