@@ -1,16 +1,5 @@
 # Repository for learning Scala.
 
-
-## Here's an overview for how my code works
-  1. Create a class called MyTimer.
-  2. Create a boolean variable for running to keep track of the status.
-  3. Prompt the user for a time Input.
-  4. Take that input and check that it matches the desired format using regex.
-  5. Parse out the desired unit and value using String.slice, convert to a total number of seconds to count.
-  6. Create an Asynchronous callback to allow the user to pause the timer at any time
-# Repository for learning Scala.
-
-
 ## Here's an overview for how my code works
   1. Create a class called MyTimer.
   2. Create a boolean variable for running to keep track of the status.
@@ -35,12 +24,12 @@
 
 
 ## Here's a summary of some things I learned or found notable
-  I really like the flexibility of being able to assign a type to an object when you instantiate.
+  1. I really like the flexibility of being able to assign a type to an object when you instantiate.
 
-  Spark utilizes an RDD - Resilient  Distributed Dataset. It distributes data across multiple nodes, copies data to be fault tolerant, and partitions the data, allowing parallel operations.
+  2. Spark utilizes an RDD - Resilient  Distributed Dataset. It distributes data across multiple nodes, copies data to be fault tolerant, and partitions the data, allowing parallel operations.
 
-  Scala allows the direct import and use of Java libraries.
+  3. Scala allows the direct import and use of Java libraries.
 
-  Scala didn't like to run when pointed to newer version of Java, I had to ensure I was using JDK8
+  4. Scala didn't like to run when pointed to newer version of Java, I had to ensure I was using JDK8
 
-  I really like that when you're running code from the command line it assigns a res value to the output of your expressions and allows you to easily pass those results to newer expressions as needed.
+  5. I really like that when you're running code from the command line it assigns a res value to the output of your expressions and allows you to easily pass those results to newer expressions as needed.
