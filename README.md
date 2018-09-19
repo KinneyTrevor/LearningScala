@@ -9,7 +9,7 @@
   5. Parse out the desired unit and value using String.slice, convert to a total number of seconds to count.
   6. Create an Asynchronous callback to allow the user to pause the timer at any time
 
-**Concerns/Troubles**
+## Concerns/Troubles
   The way I was able to get this working was by running the following commands
   spark-shell
   :load MyTimer.scala (from its directory)
@@ -25,7 +25,7 @@
   When entering values, what you type is not updated to the console. The correct values are parsed and the appropriate duration is timed, however it shows up invisible while you type it on my console/environment.
 
 
-**Here's a summary of some things I learned or found notable**
+## Here's a summary of some things I learned or found notable
   I really like the flexibility of being able to assign a type to an object when you instantiate.
 
   Spark utilizes an RDD - Resilliant Distributed Dataset. It distributes data across multiple nodes, copies data to be fault tolerant, and partitions the data, allowing parallel operations.
